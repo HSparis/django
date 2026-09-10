@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Portal | Forum Information Academy</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), 
+                        url("{% static 'images/img_top_mv01.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-card {
+            background-color: rgba(30, 41, 59, 0.90);
+            backdrop-filter: blur(8px);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 440px;
+        }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .header .logo { max-width: 90px; height: auto; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto; }
+        .header h1 { font-size: 1.25rem; color: #38bdf8; margin-bottom: 0.5rem; line-height: 1.4; }
+        .header p { font-size: 0.9rem; color: #94a3b8; font-weight: 500; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #cbd5e1; }
+        .form-group input {
+            width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #334155;
+            background-color: rgba(15, 23, 42, 0.8); color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s;
+        }
+        .form-group input:focus { border-color: #38bdf8; }
+        .btn-submit {
+            width: 100%; padding: 0.75rem; background-color: #0284c7; color: white; border: none;
+            border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s; margin-top: 1rem;
+        }
+        .btn-submit:hover { background-color: #0369a1; }
+        .footer-links { margin-top: 1.5rem; text-align: center; font-size: 0.85rem; }
+        .footer-links a { color: #38bdf8; text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+        .error-box {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="header">
+            <img src="{% static 'images/logo.png' %}" alt="School Logo" class="logo">
+            <h1>Forum Information Academy</h1>
+            <p>Student Portal System</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Display custom validation error messages -->
+            {% if form.non_field_errors %}
+                <div class="error-box">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_username">Student ID / Username</label>
+                <input type="text" name="username" id="id_username" required placeholder="Enter your ID" value="{{ form.username.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" required placeholder="Enter your password">
+            </div>
+
+            <button type="submit" class="btn-submit">Sign In</button>
+        </form>
+
+        <div class="footer-links">
+            <p><a href="#">Forgot your password?</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

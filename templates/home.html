@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Student Portal | Forum Information Academy</title>
+    <!-- FontAwesome icons for portal UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f1f5f9; color: #334155; display: flex; min-height: 100vh; }
+
+        /* Sidebar Styling */
+        .sidebar { width: 250px; background-color: #1e293b; color: #f8fafc; flex-shrink: 0; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 1.5rem 1rem; text-align: center; border-bottom: 1px solid #334155; }
+        .sidebar-header img { max-width: 50px; margin-bottom: 0.5rem; }
+        .sidebar-header h2 { font-size: 0.95rem; color: #38bdf8; font-weight: 600; }
+        .sidebar-menu { list-style: none; padding: 1rem 0; flex: 1; }
+        .sidebar-menu li a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: #cbd5e1; text-decoration: none; font-size: 0.9rem; transition: background 0.2s; }
+        .sidebar-menu li a:hover, .sidebar-menu li.active a { background-color: #334155; color: #38bdf8; }
+
+        /* Main Content Area */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; }
+
+        /* Topbar Styling */
+        .topbar { background-color: #ffffff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .topbar-left h1 { font-size: 1.1rem; color: #0f172a; }
+        .topbar-right { display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem; }
+        .user-profile-info { display: flex; align-items: center; gap: 0.5rem; }
+        .role-badge { background-color: #0284c7; color: white; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+        .btn-logout { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 0.875rem; display: flex; align-items: center; gap: 0.3rem; }
+        .btn-logout:hover { text-decoration: underline; }
+
+        /* Content Container */
+        .content { padding: 2rem; flex: 1; }
+
+        /* Quick Action Icon Buttons */
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .action-card { background: #ffffff; border-radius: 8px; padding: 1.25rem 0.5rem; text-align: center; text-decoration: none; color: #475569; border: 1px solid #e2e8f0; transition: transform 0.2s, box-shadow 0.2s; }
+        .action-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .icon-circle { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; font-size: 1.25rem; color: #fff; }
+
+        .bg-blue { background-color: #3b82f6; }
+        .bg-amber { background-color: #f59e0b; }
+        .bg-cyan { background-color: #06b6d4; }
+        .bg-emerald { background-color: #10b981; }
+
+        /* Dashboard Grid / Panels */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .panel { background: #ffffff; border-radius: 8px; padding: 1.5rem; border: 1px solid #e2e8f0; }
+        .panel h2 { font-size: 1rem; color: #0f172a; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9; display: flex; align-items: center; gap: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Lateral Dark -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Forum Information Academy</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active"><a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="#"><i class="fa-solid fa-user"></i> My Account</a></li>
+            <li><a href="#"><i class="fa-solid fa-book-open"></i> My Courses</a></li>
+            <li><a href="#"><i class="fa-solid fa-graduation-cap"></i> Academic Life</a></li>
+            
+            {% if user.profile.role == 'teacher' or user.profile.role == 'board' %}
+            <li><a href="#"><i class="fa-solid fa-pen-to-square"></i> Assignments</a></li>
+            {% endif %}
+
+            {% if user.profile.role == 'support' or user.profile.role == 'board' %}
+            <li><a href="#"><i class="fa-solid fa-headset"></i> Support Desk</a></li>
+            {% endif %}
+
+            {% if user.profile.role == 'board' %}
+            <li><a href="#"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+            {% endif %}
+
+            <li><a href="#"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
+            <li><a href="#"><i class="fa-solid fa-circle-question"></i> Help & Tutorial</a></li>
+        </ul>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-wrapper">
+        <!-- Topbar Superior -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>Student Portal Home</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="user-profile-info">
+                    <i class="fa-solid fa-circle-user fa-lg"></i>
+                    <span>Hello, <strong>{{ user.username }}</strong></span>
+                    <span class="role-badge">{{ user.profile.get_role_display }}</span>
+                </div>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <!-- Área de Conteúdo da Home -->
+        <main class="content">
+
+            <!-- Atalhos Rápidos com Ícones Circulares -->
+            <div class="quick-actions">
+                <a href="#" class="action-card">
+                    <div class="icon-circle bg-blue"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <span>Academic Life</span>
+                </a>
+                <a href="#" class="action-card">
+                    <div class="icon-circle bg-amber"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                    <span>Financial</span>
+                </a>
+                <a href="#" class="action-card">
+                    <div class="icon-circle bg-cyan"><i class="fa-solid fa-credit-card"></i></div>
+                    <span>Payments</span>
+                </a>
+                <a href="#" class="action-card">
+                    <div class="icon-circle bg-emerald"><i class="fa-solid fa-comments"></i></div>
+                    <span>Online Support</span>
+                </a>
+            </div>
+
+            <!-- Painéis Principais -->
+            <div class="dashboard-grid">
+                
+                <div class="panel">
+                    <h2><i class="fa-solid fa-bullhorn" style="color: #0284c7;"></i> Latest Announcements</h2>
+                    <p style="font-size: 0.9rem; color: #64748b;">No new announcements at the moment. Check back soon for updates regarding class schedules and exams.</p>
+                </div>
+
+                <div class="panel">
+                    <h2><i class="fa-solid fa-book" style="color: #0284c7;"></i> Active Enrolled Courses</h2>
+                    <p style="font-size: 0.9rem; color: #64748b;">Information Technology Systems - Semester 1</p>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
