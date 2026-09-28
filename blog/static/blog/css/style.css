@@ -1,0 +1,10 @@
+body {
+    background-color: #f4f6f8;
+    font-family: Arial, sans-serif;
+}
+
+.navbar-brand 
+{
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
