@@ -1,8 +1,14 @@
 {% extends "blog/base.html" %}
 
-{% block title %}Sobre | DjangoBlog{% endblock %}
+{% block title %}About | DjangoBlog{% endblock %}
 
 {% block content %}
-<h1>Sobre</h1>
-<p>Conheça o {{ team }}.</p>
+<section class="simple-page">
+	<p class="eyebrow">Who we are</p>
+	<h1>A community built around <span>ideas.</span></h1>
+	<div class="simple-page__body">
+		<p>{{ team }} is an open space for sharing stories, lessons, and points of view. Every post can be the start of a conversation.</p>
+		<a class="button button--primary" href="{% url 'home' %}">Browse the posts <span aria-hidden="true">→</span></a>
+	</div>
+</section>
 {% endblock %}

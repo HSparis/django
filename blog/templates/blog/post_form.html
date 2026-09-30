@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+{% block title %}{% if object %}Edit post{% else %}New post{% endif %} | DjangoBlog{% endblock %}
+{% block content %}
+<section class="form-page">
+    <a class="back-link" href="{% if object %}{% url 'post_detail' object.slug %}{% else %}{% url 'home' %}{% endif %}"><span aria-hidden="true">←</span> Back</a>
+    <header class="page-heading form-heading">
+        <p class="eyebrow">{% if object %}Update your post{% else %}Share an idea{% endif %}</p>
+        <h1>{% if object %}Edit post{% else %}New post{% endif %}</h1>
+        <p class="page-heading__intro">Shape your story and choose how it will appear.</p>
+    </header>
+    <form method="post" class="post-form">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+            <div class="form-field{% if field.errors %} form-field--error{% endif %}">
+                <label for="{{ field.id_for_label }}">
+                      {% if field.name == 'title' %}Title{% elif field.name == 'content' %}Post content{% elif field.name == 'category' %}Category{% elif field.name == 'tags' %}Tags{% elif field.name == 'status' %}Visibility{% else %}{{ field.label }}{% endif %}
+                      {% if field.field.required %}<span class="required-mark" aria-label="required">*</span>{% endif %}
+                </label>
+                {% if field.name == 'content' %}<p class="field-hint">Write in your own words. Line breaks will be preserved.</p>{% endif %}
+                {{ field }}
+                {% if field.name == 'tags' %}<p class="field-hint">Hold Ctrl to select more than one.</p>{% endif %}
+                {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="button button--primary">{% if object %}Save changes{% else %}Publish post{% endif %}<span aria-hidden="true">→</span></button>
+            <a class="button button--quiet" href="{% if object %}{% url 'post_detail' object.slug %}{% else %}{% url 'home' %}{% endif %}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

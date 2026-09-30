@@ -1,8 +1,16 @@
 {% extends "blog/base.html" %}
 
-{% block title %}Início | DjangoBlog{% endblock %}
+{% block title %}Welcome | DjangoBlog{% endblock %}
 
 {% block content %}
-<h1>Welcome {{ title }}!</h1>
-<p>Welcome to the home page of our blog. Here you can find the latest posts and updates from our authors. Feel free to explore and enjoy the content!</p>
+<section class="welcome-page">
+	<p class="eyebrow">Introducing DjangoBlog</p>
+	<h1>Good ideas deserve <span>room.</span></h1>
+	<p class="welcome-page__intro">A shared notebook for discoveries, experiences, and conversations worth starting.</p>
+	<div class="welcome-page__actions">
+		<a class="button button--primary" href="{% url 'home' %}">Explore posts <span aria-hidden="true">→</span></a>
+		<a class="text-link" href="{% url 'about' %}">About the project ↗</a>
+	</div>
+	<div class="welcome-page__stamp" aria-hidden="true">D<br><span>•</span></div>
+</section>
 {% endblock %}

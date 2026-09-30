@@ -1,39 +1,61 @@
 {% extends "blog/base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Articles | DjangoBlog{% endblock %}
 {% block content %}
-<div class="row">
-  {% for post in page_obj %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">{{ post.title }}</h5>
-          <p class="card-text">{{ post.content|truncatewords:20 }}</p>
-          <a href="{% url 'post_detail' post.slug %}" class="btn btn-primary">Read more</a>
+<header class="page-heading list-heading">
+  <p class="eyebrow">Ideas, stories, and discoveries</p>
+  <h1>Stories worth <span>staying for.</span></h1>
+  <p class="page-heading__intro">A place to share the things worth thinking about, making, and telling.</p>
+</header>
+
+<div class="journal-layout">
+  <section class="post-feed" aria-label="Published articles">
+    <div class="section-heading"><h2>Recent posts</h2><span>{{ page_obj.paginator.count }} post{{ page_obj.paginator.count|pluralize }}</span></div>
+    <div class="post-grid">
+      {% for post in page_obj %}
+        <article class="post-card">
+          <div class="post-card__topline">
+            <span class="post-index">{{ forloop.counter|stringformat:"02d" }}</span>
+            {% if post.category %}<span class="category-label">{{ post.category.name }}</span>{% else %}<span class="category-label">Article</span>{% endif %}
+          </div>
+          <h3><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h3>
+          <p class="post-card__excerpt">{{ post.content|truncatewords:28 }}</p>
+          <div class="post-card__footer">
+            <time datetime="{{ post.created_at|date:'Y-m-d' }}">{{ post.created_at|date:"M j, Y" }}</time>
+            <a class="text-link" href="{% url 'post_detail' post.slug %}">Read post <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+      {% empty %}
+        <div class="empty-state">
+          <span class="empty-state__mark" aria-hidden="true">✳</span>
+          <h3>Every story starts somewhere.</h3>
+          <p>There are no published posts yet. Why not write the first one?</p>
+          <a class="button button--primary" href="{% url 'post_create' %}">Write the first post</a>
         </div>
-      </div>
+      {% endfor %}
     </div>
-  {% empty %}
-    <p>No posts yet.</p>
-  {% endfor %}
+
+    {% if page_obj.paginator.num_pages > 1 %}
+      <nav class="pagination-bar" aria-label="Pagination">
+        <span class="pagination-bar__count">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <div class="pagination-bar__actions">
+          {% if page_obj.has_previous %}<a class="button button--quiet" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous page">← Previous</a>{% endif %}
+          {% if page_obj.has_next %}<a class="button button--quiet" href="?page={{ page_obj.next_page_number }}" aria-label="Next page">Next →</a>{% endif %}
+        </div>
+      </nav>
+    {% endif %}
+  </section>
+
+  <aside class="category-rail">
+    <p class="eyebrow">Browse by topic</p>
+    <h2>Categories</h2>
+    <ul class="category-list">
+      {% for category in categories %}
+        <li><span>{{ category.name }}</span><span>{{ category.posts.count }}</span></li>
+      {% empty %}
+        <li class="category-list__empty">Categories will appear here.</li>
+      {% endfor %}
+    </ul>
+    <div class="rail-note"><span aria-hidden="true">✳</span><p>Good ideas get better when they are shared.</p></div>
+  </aside>
 </div>
-
-<nav>
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-    {% endif %}
-    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
-    {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-    {% endif %}
-  </ul>
-</nav>
-
-<hr>
-  <h5>Categories</h5>
-  <ul class="list-unstyled">
-    {% for category in categories %}
-      <li>{{ category.name }} ({{ category.posts.count }})</li>
-    {% endfor %}
-  </ul>
 {% endblock %}
