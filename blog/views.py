@@ -3,15 +3,31 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post, Category
 from django.urls import reverse_lazy
+from .forms import PostForm
 
 class PostCreateView(CreateView):
     model = Post
-    fields = ["title", "content", "category", "tags", "status"]
+    form_class = PostForm
     template_name = "blog/post_form.html"
 
     def get_success_url(self):
-        return reverse_lazy("post_detail", kwargs={"slug": self.object.slug})   
+        return reverse_lazy(
+            "post_detail",
+            kwargs={"slug": self.object.slug}
+        )
 
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = "blog/post_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "post_detail",
+            kwargs={"slug": self.object.slug}
+        )
+    
 class PostListView(ListView):
     model = Post
     template_name = "blog/post_list.html"
@@ -24,15 +40,6 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
         return context
-
-class PostUpdateView(UpdateView):
-    model = Post
-    fields = ["title", "content", "category", "tags", "status"]
-    template_name = "blog/post_form.html"
-
-    def get_success_url(self):
-        return reverse_lazy("post_detail", kwargs={"slug": self.object.slug})
-
 
 class   PostDeleteView(DeleteView):
     model = Post

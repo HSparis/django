@@ -1,32 +1,47 @@
 {% extends "blog/base.html" %}
-{% block title %}{% if object %}Edit post{% else %}New post{% endif %} | DjangoBlog{% endblock %}
+
+{% block title %}
+    {% if object %}Edit Post{% else %}New Post{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="form-page">
-    <a class="back-link" href="{% if object %}{% url 'post_detail' object.slug %}{% else %}{% url 'home' %}{% endif %}"><span aria-hidden="true">←</span> Back</a>
     <header class="page-heading form-heading">
-        <p class="eyebrow">{% if object %}Update your post{% else %}Share an idea{% endif %}</p>
-        <h1>{% if object %}Edit post{% else %}New post{% endif %}</h1>
-        <p class="page-heading__intro">Shape your story and choose how it will appear.</p>
+        <p class="eyebrow">{% if object %}Your journal{% else %}Make room for an idea{% endif %}</p>
+        <h1>{% if object %}Edit your <span>story.</span>{% else %}Write a new <span>story.</span>{% endif %}</h1>
+        <p class="page-heading__intro">Shape the words, choose a topic, and add a cover that sets the scene.</p>
     </header>
-    <form method="post" class="post-form">
+
+    {% if form.non_field_errors %}
+        <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="post-form">
         {% csrf_token %}
-        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+
+        {% if object.cover_image %}
+            <div class="current-cover">
+                <img src="{{ object.cover_image.url }}" alt="Current cover for {{ object.title }}">
+                <p>Current cover</p>
+            </div>
+        {% endif %}
+
         {% for field in form %}
             <div class="form-field{% if field.errors %} form-field--error{% endif %}">
-                <label for="{{ field.id_for_label }}">
-                      {% if field.name == 'title' %}Title{% elif field.name == 'content' %}Post content{% elif field.name == 'category' %}Category{% elif field.name == 'tags' %}Tags{% elif field.name == 'status' %}Visibility{% else %}{{ field.label }}{% endif %}
-                      {% if field.field.required %}<span class="required-mark" aria-label="required">*</span>{% endif %}
-                </label>
-                {% if field.name == 'content' %}<p class="field-hint">Write in your own words. Line breaks will be preserved.</p>{% endif %}
+                {{ field.label_tag }}
+                {% if field.help_text %}<p class="field-hint">{{ field.help_text }}</p>{% endif %}
                 {{ field }}
-                {% if field.name == 'tags' %}<p class="field-hint">Hold Ctrl to select more than one.</p>{% endif %}
-                {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+                {% if field.errors %}
+                    <div class="field-errors">{{ field.errors }}</div>
+                {% endif %}
             </div>
         {% endfor %}
+
         <div class="form-actions">
-            <button type="submit" class="button button--primary">{% if object %}Save changes{% else %}Publish post{% endif %}<span aria-hidden="true">→</span></button>
-            <a class="button button--quiet" href="{% if object %}{% url 'post_detail' object.slug %}{% else %}{% url 'home' %}{% endif %}">Cancel</a>
+            <button type="submit" class="button button--primary">Save story <span aria-hidden="true">↗</span></button>
+            <a href="{% url 'home' %}" class="button button--quiet">Cancel</a>
         </div>
     </form>
 </section>
+
 {% endblock %}

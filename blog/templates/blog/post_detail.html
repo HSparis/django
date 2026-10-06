@@ -18,7 +18,17 @@
 			<a class="button button--danger-quiet" href="{% url 'post_delete' post.slug %}">Delete</a>
 		</div>
 	</div>
-	<div class="article-body">{{ post.content|linebreaks }}</div>
+	
+    {% if post.cover_image %}
+        <img
+            src="{{ post.cover_image.url }}"
+            class="img-fluid rounded mb-3"
+            alt="{{ post.title }}"
+        >
+    {% endif %}
+
+    <div class="article-body">{{ post.content|linebreaks }}</div>
+
 	{% if post.tags.all %}
 		<footer class="article-tags"><span>Topics</span>{% for tag in post.tags.all %}<span class="tag-chip">{{ tag.name }}</span>{% endfor %}</footer>
 	{% endif %}

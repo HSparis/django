@@ -13,15 +13,27 @@
     <div class="post-grid">
       {% for post in page_obj %}
         <article class="post-card">
-          <div class="post-card__topline">
-            <span class="post-index">{{ forloop.counter|stringformat:"02d" }}</span>
-            {% if post.category %}<span class="category-label">{{ post.category.name }}</span>{% else %}<span class="category-label">Article</span>{% endif %}
-          </div>
-          <h3><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h3>
-          <p class="post-card__excerpt">{{ post.content|truncatewords:28 }}</p>
-          <div class="post-card__footer">
-            <time datetime="{{ post.created_at|date:'Y-m-d' }}">{{ post.created_at|date:"M j, Y" }}</time>
-            <a class="text-link" href="{% url 'post_detail' post.slug %}">Read post <span aria-hidden="true">↗</span></a>
+          {% if post.cover_image %}
+            <div class="post-card__cover">
+              <img src="{{ post.cover_image.url }}" alt="Cover image for {{ post.title }}" loading="lazy">
+            </div>
+          {% else %}
+            <div class="post-card__cover post-card__cover--empty" aria-hidden="true">
+              <span>FIELD NOTES</span><span class="post-card__cover-mark">D</span>
+            </div>
+          {% endif %}
+
+          <div class="post-card__content">
+            <div class="post-card__topline">
+              <span class="post-index">{{ forloop.counter|stringformat:"02d" }}</span>
+              {% if post.category %}<span class="category-label">{{ post.category.name }}</span>{% else %}<span class="category-label">Article</span>{% endif %}
+            </div>
+            <h3><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h3>
+            <p class="post-card__excerpt">{{ post.content|truncatewords:28 }}</p>
+            <div class="post-card__footer">
+              <time datetime="{{ post.created_at|date:'Y-m-d' }}">{{ post.created_at|date:"M j, Y" }}</time>
+              <a class="text-link" href="{% url 'post_detail' post.slug %}">Read post <span aria-hidden="true">↗</span></a>
+            </div>
           </div>
         </article>
       {% empty %}
