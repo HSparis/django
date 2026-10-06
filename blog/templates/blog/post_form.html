@@ -26,6 +26,10 @@
             </div>
         {% endif %}
 
+        <div class="cover-preview-wrap">
+            <img id="preview" src="" alt="Cover preview" style="display: none; max-width: 200px; border-radius: 12px;">
+        </div>
+
         {% for field in form %}
             <div class="form-field{% if field.errors %} form-field--error{% endif %}">
                 {{ field.label_tag }}
@@ -43,5 +47,25 @@
         </div>
     </form>
 </section>
+
+<script>
+    const fileInput = document.querySelector('input[type="file"]');
+    const preview = document.getElementById('preview');
+
+    if (fileInput && preview) {
+        fileInput.addEventListener('change', function(event) {
+            const [file] = event.target.files;
+
+            if (file) {
+                const url = URL.createObjectURL(file);
+                preview.src = url;
+                preview.style.display = 'block';
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';
+            }
+        });
+    }
+</script>
 
 {% endblock %}
