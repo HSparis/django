@@ -1,16 +1,10 @@
 {% extends "blog/base.html" %}
-
-{% block title %}Welcome | DjangoBlog{% endblock %}
-
+{% block title %}Bem-vindo | Neo Tokyo{% endblock %}
 {% block content %}
 <section class="welcome-page">
-	<p class="eyebrow">Introducing DjangoBlog</p>
-	<h1>Good ideas deserve <span>room.</span></h1>
-	<p class="welcome-page__intro">A shared notebook for discoveries, experiences, and conversations worth starting.</p>
-	<div class="welcome-page__actions">
-		<a class="button button--primary" href="{% url 'home' %}">Explore posts <span aria-hidden="true">→</span></a>
-		<a class="text-link" href="{% url 'about' %}">About the project ↗</a>
-	</div>
-	<div class="welcome-page__stamp" aria-hidden="true">D<br><span>•</span></div>
+  <p class="eyebrow">Bem-vindo ao Neo Tokyo</p>
+  <h1>Descubra seu<br>próximo <span>universo.</span></h1>
+  <p class="page-heading__intro">Cultura, games e tecnologia. Histórias e ideias para inspirar seu próximo projeto.</p>
+  <a class="button button--primary" href="{% url 'home' %}">Explorar artigos ↗</a>
 </section>
 {% endblock %}

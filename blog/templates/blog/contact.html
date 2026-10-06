@@ -1,14 +1,12 @@
 {% extends "blog/base.html" %}
-
-{% block title %}Contact | DjangoBlog{% endblock %}
-
+{% block title %}Contato | Neo Tokyo{% endblock %}
 {% block content %}
 <section class="simple-page contact-page">
-	<p class="eyebrow">Let's talk</p>
-	<h1>Every good idea starts with <span>a conversation.</span></h1>
-	<div class="simple-page__body">
-		<p>Have a suggestion, a question, or a story to share? We would love to hear from you.</p>
-		<a class="button button--primary" href="{% url 'post_create' %}">Write a post <span aria-hidden="true">→</span></a>
-	</div>
+  <p class="eyebrow">Vamos conversar</p>
+  <h1>Boas histórias começam<br>com <span>uma conexão.</span></h1>
+  <div class="simple-page__body">
+    <p>Tem uma descoberta, experiência ou projeto para compartilhar? Transforme sua perspectiva em um artigo para o Neo Tokyo.</p>
+    <a class="button button--primary" href="{% url 'post_create' %}">Escrever um artigo <span aria-hidden="true">↗</span></a>
+  </div>
 </section>
 {% endblock %}

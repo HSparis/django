@@ -1,0 +1,23 @@
+{% load reading_time %}
+<article class="post-card">
+  <a class="post-card__cover{% if not post.cover_image %} post-card__cover--empty{% endif %}" href="{% url 'post_detail' post.slug %}" aria-label="Ler {{ post.title }}">
+    {% if post.cover_image %}
+      <img src="{{ post.cover_image.url }}" alt="" loading="lazy" decoding="async">
+    {% else %}
+      <span class="cover-caption" aria-hidden="true">NEO TOKYO / STORIES</span><span class="post-card__cover-mark" aria-hidden="true" lang="ja">東京</span><span class="cover-cross" aria-hidden="true">＋</span>
+    {% endif %}
+    <span class="cover-arrow" aria-hidden="true">↗</span>
+  </a>
+  <div class="post-card__content">
+    <div class="post-card__topline">
+      <span class="category-label">{% if post.category %}{{ post.category.name }}{% else %}Artigo{% endif %}</span>
+      <span class="reading-label">{{ post.content|reading_time }} min</span>
+    </div>
+    <h3><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h3>
+    <p class="post-card__excerpt">{{ post.content|striptags|truncatewords:24 }}</p>
+    <div class="post-card__footer">
+      <time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"d/m/Y" }}</time>
+      <a class="text-link" href="{% url 'post_detail' post.slug %}" aria-label="Ler artigo: {{ post.title }}">Ler artigo <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</article>
