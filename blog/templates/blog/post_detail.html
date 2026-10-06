@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
 {% load reading_time %}
-{% block title %}{{ post.title }} | Neo Tokyo{% endblock %}
+{% block title %}{{ post.title }} | Neo Niigata{% endblock %}
 {% block description %}{{ post.content|striptags|truncatewords:25 }}{% endblock %}
 {% block content %}
 <article class="article-page">
@@ -8,7 +8,7 @@
   <header class="article-header">
     <div class="article-header__meta"><span class="category-label">{% if post.category %}{{ post.category.name }}{% else %}Artigo{% endif %}</span><span class="reading-label">{{ post.content|reading_time }} min de leitura</span></div>
     <h1>{{ post.title }}</h1>
-    <p class="article-header__byline">Publicado em <time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"d/m/Y" }}</time> <span aria-hidden="true">/</span> NEO TOKYO</p>
+    <p class="article-header__byline">Publicado em <time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"d/m/Y" }}</time> <span aria-hidden="true">/</span> NEO NIIGATA</p>
   </header>
   {% if post.cover_image %}
     <figure class="article-cover"><img src="{{ post.cover_image.url }}" alt="Capa de {{ post.title }}" fetchpriority="high"></figure>

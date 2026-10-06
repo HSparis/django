@@ -2,7 +2,7 @@
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = "neo-tokyo-tests-only"
+SECRET_KEY = "neo-niigata-tests-only"
 DEBUG = False
 ALLOWED_HOSTS = ["testserver", "localhost", "127.0.0.1"]
 INSTALLED_APPS = [
