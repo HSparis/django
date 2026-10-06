@@ -1,14 +1,13 @@
 {% extends "blog/base.html" %}
-
-{% block title %}About | DjangoBlog{% endblock %}
-
+{% block title %}Sobre | Neo Tokyo{% endblock %}
 {% block content %}
 <section class="simple-page">
-	<p class="eyebrow">Who we are</p>
-	<h1>A community built around <span>ideas.</span></h1>
-	<div class="simple-page__body">
-		<p>{{ team }} is an open space for sharing stories, lessons, and points of view. Every post can be the start of a conversation.</p>
-		<a class="button button--primary" href="{% url 'home' %}">Browse the posts <span aria-hidden="true">→</span></a>
-	</div>
+  <p class="eyebrow">Por trás das histórias</p>
+  <h1>Curiosidade é o nosso<br><span>ponto de partida.</span></h1>
+  <div class="simple-page__body">
+    <p>{{ team }} é um espaço para compartilhar descobertas, experiências e projetos sobre Japão, games, cultura e tecnologia.</p>
+    <p>Uma comunidade começa quando alguém decide dividir uma ideia. Este é o lugar para dar esse primeiro passo.</p>
+    <a class="button button--primary" href="{% url 'home' %}#artigos">Explorar artigos <span aria-hidden="true">↗</span></a>
+  </div>
 </section>
 {% endblock %}

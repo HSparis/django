@@ -1,16 +1,16 @@
 {% extends "blog/base.html" %}
-{% block title %}Delete post | DjangoBlog{% endblock %}
+{% block title %}Excluir artigo | Neo Tokyo{% endblock %}
 {% block content %}
 <section class="confirm-page">
     <div class="confirm-mark" aria-hidden="true">!</div>
-    <p class="eyebrow">Confirm deletion</p>
-    <h1>Delete this post?</h1>
+    <p class="eyebrow">Confirmar exclusão</p>
+    <h1>Excluir este artigo?</h1>
     <p class="confirm-page__title">“{{ object.title }}”</p>
-    <p class="confirm-page__note">This action is permanent and cannot be undone.</p>
+    <p class="confirm-page__note">Esta ação é permanente e não pode ser desfeita.</p>
     <form method="post" class="confirm-actions">
         {% csrf_token %}
-        <button type="submit" class="button button--danger">Yes, delete post</button>
-        <a href="{% url 'post_detail' object.slug %}" class="button button--quiet">Keep post</a>
+        <button type="submit" class="button button--danger">Sim, excluir artigo</button>
+        <a href="{% url 'post_detail' object.slug %}" class="button button--quiet">Manter artigo</a>
     </form>
 </section>
 {% endblock %}
