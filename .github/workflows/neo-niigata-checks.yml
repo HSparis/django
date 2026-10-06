@@ -1,8 +1,8 @@
-name: Neo Tokyo checks
+name: Neo Niigata checks
 
 on:
   push:
-    branches: ["neo-tokyo/visual-etapa-1"]
+    branches: ["neo-niigata/nome-do-projeto"]
   pull_request:
     branches: ["master"]
 

@@ -70,7 +70,7 @@ class PostDetailView(DetailView):
         return context
     
 def about(request):
-    return render(request, "blog/about.html", {"team": "Neo Tokyo"})
+    return render(request, "blog/about.html", {"team": "Neo Niigata"})
 
 def contact(request):
     return render(request, "blog/contact.html")

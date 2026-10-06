@@ -1,6 +1,6 @@
-# Neo Tokyo — primeira etapa visual
+# Neo Niigata — primeira etapa visual
 
-Esta etapa aplica a identidade Neo Tokyo ao blog existente: azul escuro, vermelho, ciano, Home com artigo mais recente em destaque, cards reutilizáveis, arte alternativa para posts sem capa e páginas adaptadas para celular.
+Esta etapa aplica a identidade Neo Niigata ao blog existente: azul escuro, vermelho, ciano, Home com artigo mais recente em destaque, cards reutilizáveis, arte alternativa para posts sem capa e páginas adaptadas para celular.
 
 ## O que foi implementado
 
@@ -22,7 +22,7 @@ Faça uma cópia de segurança da pasta local antes de aplicar os arquivos. Voc�
 
 ```powershell
 git fetch origin
-git switch --track origin/neo-tokyo/visual-etapa-1
+git switch --track origin/neo-niigata/nome-do-projeto
 python manage.py check
 python manage.py runserver
 ```

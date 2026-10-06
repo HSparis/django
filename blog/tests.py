@@ -129,7 +129,7 @@ class MagazineTests(TestCase):
             with self.subTest(page=name):
                 response = self.client.get(reverse(name, args=args))
                 self.assertEqual(response.status_code, 200)
-                self.assertContains(response, "Neo Tokyo")
+                self.assertContains(response, "Neo Niigata")
 
     def test_existing_publish_edit_and_delete_flow(self):
         response = self.client.post(reverse("post_create"), {
