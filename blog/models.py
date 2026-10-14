@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
 from PIL import Image
 
@@ -20,6 +21,12 @@ class Post(models.Model):
         ('published', 'Published'),
     ]
 
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='posts',
+        default=1,
+    )
     title = models.CharField(max_length=200)
     content = models.TextField()
     slug = models.SlugField(max_length=200, unique=True)

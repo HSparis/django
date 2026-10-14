@@ -1,15 +1,15 @@
 {% extends "blog/base.html" %}
 
 {% block title %}
-    {% if object %}Editar artigo | Neo Niigata{% else %}Novo artigo | Neo Niigata{% endif %}
+    {% if object %}Edit article | Neo Niigata{% else %}New article | Neo Niigata{% endif %}
 {% endblock %}
 
 {% block content %}
 <section class="form-page">
     <header class="page-heading form-heading">
-        <p class="eyebrow">{% if object %}Seu espaço de criação{% else %}Dê espaço a uma ideia{% endif %}</p>
-        <h1>{% if object %}Edite sua <span>história.</span>{% else %}Escreva uma nova <span>história.</span>{% endif %}</h1>
-        <p class="page-heading__intro">Escreva, escolha uma categoria e adicione uma capa que apresente sua história.</p>
+        <p class="eyebrow">{% if object %}Your creative space{% else %}Give an idea room to grow{% endif %}</p>
+        <h1>{% if object %}Edit your <span>story.</span>{% else %}Write a new <span>story.</span>{% endif %}</h1>
+        <p class="page-heading__intro">Write, choose a category and add a cover that presents your story.</p>
     </header>
 
     {% if form.non_field_errors %}
@@ -21,13 +21,13 @@
 
         {% if object.cover_image %}
             <div class="current-cover">
-                <img src="{{ object.cover_image.url }}" alt="Capa atual de {{ object.title }}">
-                <p>Capa atual</p>
+                <img src="{{ object.cover_image.url }}" alt="Current cover of {{ object.title }}">
+                <p>Current cover</p>
             </div>
         {% endif %}
 
         <div class="cover-preview-wrap">
-            <img id="preview" alt="Prévia da capa" hidden>
+            <img id="preview" alt="Cover preview" hidden>
         </div>
 
         {% for field in form %}
@@ -42,8 +42,8 @@
         {% endfor %}
 
         <div class="form-actions">
-            <button type="submit" class="button button--primary">Salvar artigo <span aria-hidden="true">↗</span></button>
-            <a href="{% url 'home' %}" class="button button--quiet">Cancelar</a>
+            <button type="submit" class="button button--primary">Save article <span aria-hidden="true">↗</span></button>
+            <a href="{% url 'home' %}" class="button button--quiet">Cancel</a>
         </div>
     </form>
 </section>

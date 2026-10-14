@@ -1,5 +1,8 @@
 from datetime import timedelta
+import re
 
+from django.contrib.auth import get_user_model
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -20,11 +23,13 @@ class ReadingTimeTests(TestCase):
 class MagazineTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.author = get_user_model().objects.create_user(username="author")
         cls.games = Category.objects.create(name="Games")
         cls.tech = Category.objects.create(name="Tecnologia")
         cls.posts = []
         for index in range(8):
             post = Post.objects.create(
+                author=cls.author,
                 title=f"Descoberta número {index}",
                 slug=f"descoberta-{index}",
                 content="Uma nova perspectiva para compartilhar. " * 70,
@@ -36,6 +41,7 @@ class MagazineTests(TestCase):
             )
             cls.posts.append(post)
         cls.draft = Post.objects.create(
+            author=cls.author,
             title="Rascunho secreto",
             slug="rascunho-secreto",
             content="Este texto ainda está em preparação.",
@@ -83,6 +89,100 @@ class MagazineTests(TestCase):
         response = self.client.get(reverse("post_detail", args=[self.draft.slug]))
         self.assertEqual(response.status_code, 404)
 
+    def test_authenticated_author_can_view_own_draft(self):
+        self.client.force_login(self.author)
+
+        response = self.client.get(reverse("post_detail", args=[self.draft.slug]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.draft.title)
+
+    def test_other_authenticated_user_cannot_view_draft(self):
+        visitor = get_user_model().objects.create_user(username="visitor")
+        self.client.force_login(visitor)
+
+        response = self.client.get(reverse("post_detail", args=[self.draft.slug]))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_non_author_sees_custom_forbidden_page_when_editing_post(self):
+        user_model = get_user_model()
+        visitor = user_model.objects.create_user(username="visitor")
+        post = self.posts[0]
+        self.client.force_login(visitor)
+
+        response = self.client.get(reverse("post_edit", args=[post.slug]))
+
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateUsed(response, "blog/403.html")
+        self.assertContains(response, "You can't access this page.", status_code=403)
+
+    def test_anonymous_user_sees_custom_forbidden_page_when_editing_or_deleting_post(self):
+        post = self.posts[0]
+
+        for url_name in ("post_edit", "post_delete"):
+            with self.subTest(action=url_name):
+                response = self.client.get(reverse(url_name, args=[post.slug]))
+
+                self.assertEqual(response.status_code, 403)
+                self.assertTemplateUsed(response, "blog/403.html")
+                self.assertContains(
+                    response,
+                    "You can't access this page.",
+                    status_code=403,
+                )
+
+    def test_post_creation_shows_success_message(self):
+        self.client.force_login(self.author)
+
+        response = self.client.post(reverse("post_create"), {
+            "title": "Mensagem de sucesso no artigo",
+            "content": "Uma publicação criada para testar a mensagem.",
+            "category": self.games.pk,
+            "status": "published",
+        }, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Post published successfully!")
+
+    def test_password_reset_flow_sends_link_and_changes_password(self):
+        user = get_user_model().objects.create_user(
+            username="reset-user",
+            email="reset@example.com",
+            password="OriginalPassword!234",
+        )
+
+        with self.settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend"):
+            response = self.client.post(reverse("password_reset"), {
+                "email": user.email,
+            })
+
+        self.assertRedirects(response, reverse("password_reset_done"))
+        response = self.client.get(reverse("password_reset_done"))
+        self.assertTemplateUsed(response, "blog/password_reset_done.html")
+        self.assertEqual(len(mail.outbox), 1)
+        reset_url_match = re.search(
+            r"http://testserver(?P<path>/reset/[^\s]+)",
+            mail.outbox[0].body,
+        )
+        self.assertIsNotNone(reset_url_match)
+        reset_path = reset_url_match.group("path")
+        response = self.client.get(reset_path, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blog/password_reset_confirm.html")
+        confirm_path = response.request["PATH_INFO"]
+
+        response = self.client.post(confirm_path, {
+            "new_password1": "NewStrongPassword!456",
+            "new_password2": "NewStrongPassword!456",
+        })
+
+        self.assertRedirects(response, reverse("password_reset_complete"))
+        response = self.client.get(reverse("password_reset_complete"))
+        self.assertTemplateUsed(response, "blog/password_reset_complete.html")
+        user.refresh_from_db()
+        self.assertTrue(user.check_password("NewStrongPassword!456"))
+
     def test_empty_blog_displays_real_create_link(self):
         Post.objects.all().delete()
         response = self.client.get(reverse("home"))
@@ -119,6 +219,8 @@ class MagazineTests(TestCase):
         self.assertNotContains(response, '<script>alert("x")</script>')
 
     def test_existing_static_and_crud_pages_render(self):
+        self.client.force_login(self.author)
+
         for name, args in [
             ("about", []),
             ("contact", []),
@@ -132,6 +234,8 @@ class MagazineTests(TestCase):
                 self.assertContains(response, "Neo Niigata")
 
     def test_existing_publish_edit_and_delete_flow(self):
+        self.client.force_login(self.author)
+
         response = self.client.post(reverse("post_create"), {
             "title": "Um projeto que vale compartilhar",
             "content": "Descobertas feitas durante a criação do primeiro portal.",

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 import os
+from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -30,6 +31,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = []
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+MESSAGE_TAGS = {messages.ERROR: "danger"}
 
 
 # Application definition
@@ -140,5 +143,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/accounts/home/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'

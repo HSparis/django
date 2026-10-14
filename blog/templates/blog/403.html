@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+{% block title %}Access denied | Neo Niigata{% endblock %}
+{% block content %}
+<section class="confirm-page" aria-labelledby="error-title">
+  <div class="confirm-mark" aria-hidden="true">403</div>
+  <p class="eyebrow">Access denied</p>
+  <h1 id="error-title">You can't access this page.</h1>
+  <p class="confirm-page__note">You may not have permission to view or change this content.</p>
+  <div class="confirm-actions">
+    <a href="{% url 'home' %}" class="button button--quiet">Back to home</a>
+  </div>
+</section>
+{% endblock %}
