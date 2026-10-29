@@ -38,8 +38,14 @@ class Post(models.Model):
     cover_image = models.ImageField(upload_to="post_covers/", blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        if not self.slug or Post.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while Post.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
         if self.cover_image:
             img_path = self.cover_image.path

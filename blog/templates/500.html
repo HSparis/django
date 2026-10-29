@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+{% block title %}Server error | Neo Niigata{% endblock %}
+{% block content %}
+<section class="confirm-page" aria-labelledby="error-title">
+  <div class="confirm-mark" aria-hidden="true">500</div>
+  <p class="eyebrow">A temporary interruption</p>
+  <h1 id="error-title">Something went wrong.</h1>
+  <p class="confirm-page__note">Please try again in a moment.</p>
+  <div class="confirm-actions">
+    <a href="{% url 'home' %}" class="button button--primary">Go home</a>
+  </div>
+</section>
+{% endblock %}

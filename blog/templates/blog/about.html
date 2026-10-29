@@ -1,13 +1,13 @@
 {% extends "blog/base.html" %}
-{% block title %}Sobre | Neo Niigata{% endblock %}
+{% block title %}About | Neo Niigata{% endblock %}
 {% block content %}
 <section class="simple-page">
-  <p class="eyebrow">Por trás das histórias</p>
-  <h1>A curiosidade é o<br><span>nosso ponto de partida.</span></h1>
+  <p class="eyebrow">Behind the stories</p>
+  <h1>Curiosity is our<br><span>starting point.</span></h1>
   <div class="simple-page__body">
-    <p>{{ team }} é um espaço para compartilhar descobertas, experiências e projetos sobre Japão, games, cultura e tecnologia.</p>
-    <p>Uma comunidade começa quando alguém decide compartilhar uma ideia. Este é o lugar para dar esse primeiro passo.</p>
-    <a class="button button--primary" href="{% url 'home' %}#articles">Explorar artigos <span aria-hidden="true">↗</span></a>
+    <p>{{ team }} is a space to share discoveries, experiences and projects about Japan, games, culture and technology.</p>
+    <p>A community starts when someone decides to share an idea. This is the place to take that first step.</p>
+    <a class="button button--primary" href="{% url 'home' %}#articles">Explore articles <span aria-hidden="true">↗</span></a>
   </div>
 </section>
 {% endblock %}

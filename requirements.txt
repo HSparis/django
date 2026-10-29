@@ -1,0 +1,7 @@
+Django>=5.2,<5.3
+Pillow>=11,<13
+python-dotenv>=1,<2
+django-debug-toolbar>=5,<9
+psycopg2-binary>=2.9,<3
+whitenoise>=6.8,<7
+gunicorn>=23,<24; sys_platform != "win32"

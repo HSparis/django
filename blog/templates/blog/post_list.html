@@ -20,13 +20,13 @@
       <div class="featured-post__art" aria-hidden="true"><span lang="ja">新潟</span><div class="city-lines"></div></div>
     {% endif %}
     <div class="featured-post__content">
-      <p class="eyebrow"><span class="feature-badge">Em destaque</span> Última publicação</p>
-      <span class="category-label">{% if featured_post.category %}{{ featured_post.category.name }}{% else %}Artigo{% endif %}</span>
+      <p class="eyebrow"><span class="feature-badge">Featured</span> Latest publication</p>
+      <span class="category-label">{% if featured_post.category %}{{ featured_post.category.name }}{% else %}Article{% endif %}</span>
       <h2><a href="{% url 'post_detail' featured_post.slug %}">{{ featured_post.title }}</a></h2>
       <p>{{ featured_post.content|striptags|truncatewords:30 }}</p>
       <div class="featured-post__footer">
-        <span><time datetime="{{ featured_post.created_at|date:'c' }}">{{ featured_post.created_at|date:"d/m/Y" }}</time> · {{ featured_post.content|reading_time }} min de leitura</span>
-        <a class="button button--primary" href="{% url 'post_detail' featured_post.slug %}">Ler artigo <span aria-hidden="true">↗</span></a>
+        <span><time datetime="{{ featured_post.created_at|date:'c' }}">{{ featured_post.created_at|date:"d/m/Y" }}</time> · {{ featured_post.content|reading_time }} min read</span>
+        <a class="button button--primary" href="{% url 'post_detail' featured_post.slug %}">Read article <span aria-hidden="true">↗</span></a>
       </div>
     </div>
   </article>
@@ -44,8 +44,8 @@
 <div class="journal-layout" id="articles">
   <section class="post-feed" aria-labelledby="articles-heading">
     <div class="section-heading">
-      <div><p class="eyebrow">O que há de novo</p><h2 id="articles-heading">Últimos artigos<span class="heading-dot">.</span></h2></div>
-      <span>{{ page_obj.paginator.count }} artigo{{ page_obj.paginator.count|pluralize }}</span>
+      <div><p class="eyebrow">What’s new</p><h2 id="articles-heading">Latest articles<span class="heading-dot">.</span></h2></div>
+      <span>{{ page_obj.paginator.count }} article{{ page_obj.paginator.count|pluralize }}</span>
     </div>
     <div class="post-grid">
       {% for post in page_obj %}
@@ -53,33 +53,45 @@
       {% empty %}
         <div class="empty-state">
           <span class="empty-state__mark" aria-hidden="true">✳</span>
-          <h3>Todo universo começa com uma ideia.</h3>
-          <p>Ainda não há artigos publicados. Sua primeira história pode começar aqui.</p>
-          <a class="button button--primary" href="{% url 'post_create' %}">Escrever o primeiro artigo <span aria-hidden="true">↗</span></a>
+          <h3>The whole universe starts with one idea.</h3>
+          <p>No published articles yet. Your first story can begin here.</p>
+          <a class="button button--primary" href="{% url 'post_create' %}">Write the first article <span aria-hidden="true">↗</span></a>
         </div>
       {% endfor %}
     </div>
     {% if page_obj.paginator.num_pages > 1 %}
-      <nav class="pagination-bar" aria-label="Paginação de artigos">
-        <span class="pagination-bar__count">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      <nav class="pagination-bar" aria-label="Article pagination">
+        <span class="pagination-bar__count">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
         <div class="pagination-bar__actions">
-          {% if page_obj.has_previous %}<a class="button button--quiet" href="?page={{ page_obj.previous_page_number }}#articles">← Anterior</a>{% endif %}
-          {% if page_obj.has_next %}<a class="button button--quiet" href="?page={{ page_obj.next_page_number }}#articles">Próxima →</a>{% endif %}
+          {% if page_obj.has_previous %}
+            <a class="button button--quiet" href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&amp;category={{ request.GET.category|urlencode }}{% endif %}#articles">← Previous</a>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a class="button button--quiet" href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&amp;category={{ request.GET.category|urlencode }}{% endif %}#articles">Next →</a>
+          {% endif %}
         </div>
       </nav>
     {% endif %}
   </section>
   <aside class="category-rail" aria-labelledby="categories-heading">
-    <p class="eyebrow">Universos do blog</p>
-    <h2 id="categories-heading">Categorias</h2>
+    <p class="eyebrow">Blog universes</p>
+    <h2 id="categories-heading">Categories</h2>
     <ul class="category-list">
+      {% if not current_category %}
+        <li class="is-active"><a href="{% url 'home' %}"><span>All</span></a><span aria-label="all published articles">00</span></li>
+      {% endif %}
       {% for category in categories %}
-        <li><span>{{ category.name }}</span><span aria-label="{{ category.published_count }} published articles">{{ category.published_count|stringformat:"02d" }}</span></li>
+        <li class="{% if current_category and current_category|lower == category.name|lower %}is-active{% endif %}">
+          <a href="{% url 'home' %}?category={{ category.name|urlencode }}">
+            <span>{{ category.name }}</span>
+          </a>
+          <span aria-label="{{ category.published_count }} published articles">{{ category.published_count|stringformat:"02d" }}</span>
+        </li>
       {% empty %}
         <li class="category-list__empty">Your categories will appear here.</li>
       {% endfor %}
     </ul>
-    <div class="rail-note"><span aria-hidden="true">↗</span><h3>Feito para pessoas<br>que adoram descobrir.</h3><p>Entenda a ideia por trás do Neo Niigata.</p><a class="text-link" href="{% url 'about' %}">Sobre o projeto ↗</a></div>
+    <div class="rail-note"><span aria-hidden="true">↗</span><h3>Made for people<br>who love to discover.</h3><p>Understand the idea behind Neo Niigata.</p><a class="text-link" href="{% url 'about' %}">About the project ↗</a></div>
   </aside>
 </div>
 {% endblock %}

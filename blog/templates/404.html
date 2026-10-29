@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+{% block title %}Page not found | Neo Niigata{% endblock %}
+{% block content %}
+<section class="confirm-page" aria-labelledby="error-title">
+  <div class="confirm-mark" aria-hidden="true">404</div>
+  <p class="eyebrow">Lost in the universe?</p>
+  <h1 id="error-title">This page doesn’t exist.</h1>
+  <p class="confirm-page__note">The link may be broken, or the page may have moved.</p>
+  <div class="confirm-actions">
+    <a href="{% url 'home' %}" class="button button--primary">Go home</a>
+  </div>
+</section>
+{% endblock %}

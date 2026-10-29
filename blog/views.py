@@ -86,14 +86,22 @@ class PostListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return (Post.objects.filter(status="published")
-                .select_related("category").order_by("-created_at", "-pk"))
+        queryset = (
+            Post.objects.filter(status="published")
+            .select_related("category")
+            .order_by("-created_at", "-pk")
+        )
+        category_name = self.request.GET.get("category")
+        if category_name:
+            queryset = queryset.filter(category__name__iexact=category_name)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.annotate(
             published_count=Count("posts", filter=Q(posts__status="published"))
         ).order_by("name")
+        context["current_category"] = self.request.GET.get("category")
         context["featured_post"] = context["paginator"].object_list.first()
         return context
 
@@ -119,7 +127,7 @@ class PostDetailView(DetailView):
             posts = Post.objects.filter(
                 Q(status="published") | Q(author=self.request.user)
             )
-        return posts.select_related("category").prefetch_related("tags")
+        return posts.select_related("author", "category").prefetch_related("tags")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -141,3 +149,12 @@ def contact(request):
 
 def custom_403(request, exception=None):
     return render(request, "blog/403.html", status=403)
+
+
+def custom_404(request, exception=None):
+    return render(request, "404.html", status=404)
+
+
+def custom_500(request):
+    return render(request, "500.html", status=500)
+

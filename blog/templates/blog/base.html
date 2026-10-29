@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#0b0f17">
   <meta name="description" content="{% block description %}Neo Niigata: a space to share discoveries about Japan, games, culture and technology.{% endblock %}">
   <title>{% block title %}Neo Niigata · Culture, games and technology{% endblock %}</title>
+  <link rel="icon" href="{% static 'blog/favicon.svg' %}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,13 +34,13 @@
       </button>
       <div class="collapse navbar-collapse" id="main-navbar">
         <ul class="navbar-nav ms-auto align-items-lg-center">
-          <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %} href="{% url 'home' %}">Início</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#articles">Artigos</a></li>
-          <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'about' %} active{% endif %}" {% if request.resolver_match.url_name == 'about' %}aria-current="page"{% endif %} href="{% url 'about' %}">Sobre</a></li>
-          <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'contact' %} active{% endif %}" {% if request.resolver_match.url_name == 'contact' %}aria-current="page"{% endif %} href="{% url 'contact' %}">Contato</a></li>
+          <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %} href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#articles">Articles</a></li>
+          <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'about' %} active{% endif %}" {% if request.resolver_match.url_name == 'about' %}aria-current="page"{% endif %} href="{% url 'about' %}">About</a></li>
+          <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'contact' %} active{% endif %}" {% if request.resolver_match.url_name == 'contact' %}aria-current="page"{% endif %} href="{% url 'contact' %}">Contact</a></li>
           {% if user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'my_posts' %} active{% endif %}" {% if request.resolver_match.url_name == 'my_posts' %}aria-current="page"{% endif %} href="{% url 'my_posts' %}">Meus posts</a></li>
-            <li class="nav-item nav-create"><a class="button button--nav" href="{% url 'post_create' %}"><span aria-hidden="true">＋</span> Novo artigo</a></li>
+            <li class="nav-item"><a class="nav-link{% if request.resolver_match.url_name == 'my_posts' %} active{% endif %}" {% if request.resolver_match.url_name == 'my_posts' %}aria-current="page"{% endif %} href="{% url 'my_posts' %}">My posts</a></li>
+            <li class="nav-item nav-create"><a class="button button--nav" href="{% url 'post_create' %}"><span aria-hidden="true">＋</span> New article</a></li>
             <li class="nav-item"><span class="text-white me-2">{{ request.user.username }}</span></li>
             <li class="nav-item">
               <form method="post" action="{% url 'logout' %}" class="d-inline">
@@ -48,8 +49,8 @@
               </form>
             </li>
           {% else %}
-            <li class="nav-item"><a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">Entrar</a></li>
-            <li class="nav-item"><a class="btn btn-outline-light btn-sm" href="{% url 'register' %}">Cadastrar</a></li>
+            <li class="nav-item"><a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">Log in</a></li>
+            <li class="nav-item"><a class="btn btn-outline-light btn-sm" href="{% url 'register' %}">Sign up</a></li>
           {% endif %}
         </ul>
       </div>

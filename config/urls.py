@@ -16,13 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path, include, reverse_lazy
-from django.views.generic import RedirectView
-import debug_toolbar
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import include, path, reverse_lazy
 
 handler403 = 'blog.views.custom_403'
+handler404 = 'blog.views.custom_404'
+handler500 = 'blog.views.custom_500'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -60,8 +60,13 @@ urlpatterns = [
     ),
     path('', include('blog.urls')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
-    path('__debug__/', include('debug_toolbar.urls')), # Puxa o debug_toolbar
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
+
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL,

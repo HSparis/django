@@ -3,11 +3,12 @@ import re
 
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from .models import Category, Post, Tag
+from .views import custom_500
 from .templatetags.reading_time import reading_time
 
 
@@ -59,16 +60,17 @@ class MagazineTests(TestCase):
         counts = {cat.name: cat.published_count for cat in response.context["categories"]}
         self.assertEqual(counts, {"Games": 5, "Tecnologia": 3})
         self.assertContains(response, "NEO")
-        self.assertContains(response, "Em destaque")
-        self.assertContains(response, "Próxima")
+        self.assertContains(response, "blog/favicon.svg")
+        self.assertContains(response, "Featured")
+        self.assertContains(response, "Next")
         self.assertNotContains(response, self.draft.title)
 
     def test_pagination_shows_remaining_posts_without_repeating_hero(self):
         response = self.client.get(reverse("home"), {"page": 2})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["page_obj"]), 2)
-        self.assertContains(response, "Anterior")
-        self.assertNotContains(response, "Em destaque")
+        self.assertContains(response, "Previous")
+        self.assertNotContains(response, "Featured")
         self.assertNotContains(response, self.draft.title)
 
     def test_related_articles_share_category_and_exclude_current_and_drafts(self):
@@ -81,7 +83,7 @@ class MagazineTests(TestCase):
         self.assertTrue(all(p.category_id == current.category_id for p in related))
         self.assertNotIn(current.pk, [p.pk for p in related])
         self.assertNotIn(self.draft.pk, [p.pk for p in related])
-        self.assertContains(response, "min de leitura")
+        self.assertContains(response, "min read")
         self.assertContains(response, reverse("post_edit", args=[current.slug]))
         self.assertContains(response, reverse("post_delete", args=[current.slug]))
 
@@ -188,9 +190,22 @@ class MagazineTests(TestCase):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         self.assertIsNone(response.context["featured_post"])
-        self.assertContains(response, "Todo universo começa com uma ideia.")
+        self.assertContains(response, "The whole universe starts with one idea.")
         self.assertContains(response, reverse("post_create"))
-        self.assertNotContains(response, "Em destaque")
+        self.assertNotContains(response, "Featured")
+
+    def test_custom_not_found_page_is_used(self):
+        response = self.client.get("/page-that-does-not-exist/")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "404.html")
+        self.assertContains(response, "This page doesn’t exist.", status_code=404)
+
+    def test_custom_server_error_page_renders(self):
+        response = custom_500(RequestFactory().get("/"))
+
+        self.assertEqual(response.status_code, 500)
+        self.assertContains(response, "Something went wrong.", status_code=500)
 
     def test_no_cover_no_category_and_no_tags_render(self):
         post = Post.objects.create(
@@ -201,7 +216,7 @@ class MagazineTests(TestCase):
         )
         response = self.client.get(reverse("post_detail", args=[post.slug]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Artigo")
+        self.assertContains(response, "Article")
         self.assertNotContains(response, "article-cover")
         self.assertEqual(len(response.context["related_posts"]), 3)
         home = self.client.get(reverse("home"))
